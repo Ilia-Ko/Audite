@@ -38,13 +38,32 @@ import random as rnd
 print = functools.partial(print, flush=True)
 rnd.seed()
 
+# Check environment capabilities: 'sort' and 'ln' programs
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+PROG_LIST = ['sort', 'ln']
+progsOk = True
+for progName in PROG_LIST:
+    resp = proc.Popen(['which', progName], stdout=proc.PIPE, stderr=proc.STDOUT, text=True).communicate()[0]
+    if '\n' == resp[-1]:
+        resp = resp[:-1]
+    if not os.path.isfile(resp):
+        print("* Please, install '"+progName+"'")
+        progsOk = False
+if not progsOk:
+    print("FATAL: operation impossible without aforementioned utilities")
+    sys.exit(-1)
+
 # Parse and check command line arguments
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 argc = len(sys.argv)
+if argc >= 1+1:
+    if "--help" == sys.argv[1]:
+        PrintHelp()
+        sys.exit(0)
 if argc < 1+5 or argc > 1+6:
     PrintHelp()
-    sys.exit(0)
+    sys.exit(-1)
 
 modeL2M = ('--l2m' == sys.argv[1])
 linkDir = ""

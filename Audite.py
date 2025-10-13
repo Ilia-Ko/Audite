@@ -2230,7 +2230,7 @@ for progName in PROG_LIST:
         progsOk = False
 if not progsOk:
     print("FATAL: operation impossible without aforementioned utilities")
-    print("For Arch Linux system take a look at 'ffmpeg', 'imagemagick', 'flac', 'python-mutagen' and 'mp3gain' packages")
+    print("For ArchLinux system take a look at 'ffmpeg', 'imagemagick', 'flac', 'python-mutagen' and 'mp3gain' packages")
     sys.exit(-1)
 
 
