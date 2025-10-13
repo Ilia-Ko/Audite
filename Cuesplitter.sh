@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # This script takes a directory and loops through the subdirectories
-# trying to use CUE files to split corresponding FLAC/APE/WV/MP3
-# files. 'Corresponding' means that CUE and FLAC/APE/WV/MP3 files
-# are named identically, apart from extension:
+# trying to use CUE files to split corresponding FLAC/APE/M4A/WV/MP3
+# files. 'Corresponding' means that cuesheet and audio file are
+# named identically, apart from extension:
 #       'album.cue' corresponds to 'album.flac'
 #
 # ARG1: path to album collection (e.g. artist/band folder)
@@ -282,11 +282,15 @@ for cueSrc in "${cueSources[@]}"; do
     flacFile="${cueFile%.*}.flac"
     mp3File="${cueFile%.*}.mp3"
     apeFile="${cueFile%.*}.ape"
+    m4aFile="${cueFile%.*}.m4a"
     wvFile="${cueFile%.*}.wv"
     # Look for an audio file to split
     if [ -f "$apeFile" ]; then
         # Convert APE file to FLAC
         ffmpeg -hide_banner -y -v error -i "$apeFile" -acodec flac -map_metadata 0 "$flacFile"
+    elif [ -f "$m4aFile" ]; then
+        # Convert M4A file to FLAC
+        ffmpeg -hide_banner -y -v error -i "$m4aFile" -acodec flac -map_metadata 0 "$flacFile"
     elif [ -f "$wvFile" ]; then
         # Convert WV file to FLAC
         ffmpeg -hide_banner -y -v error -i "$wvFile" -acodec flac -map_metadata 0 "$flacFile"
