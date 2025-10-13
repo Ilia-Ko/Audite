@@ -2,7 +2,7 @@
 
 Present repository is a bunch of scripts that help to organize a local (or self-hosted) collection of music files. The scripts and their aims are described below in subsections.
 
-The scripts have been developed and tested under [ArchLinux](https://archlinux.org) 6.17.1 environment and do have external dependencies as listed below for each script.
+The scripts have been developed and tested under [Arch Linux](https://archlinux.org) 6.17.1 environment and do have external dependencies as listed below for each script.
 
 ## Cuesplitter.sh
 
@@ -32,8 +32,8 @@ where audio files `album-1.flac`, `album-2.flac` and `misc.flac` contain several
 
 Some music players, especially standalone devices, do not feel themselves confident enough around such **preliminary** music library. Maintenance of typical playlists (see 2 types of playlists in subsection `Playlister.py`) becomes also quite problematic, unless music library is converted into a **normalized** structure (see subsection `Audite.py` below).
 
-`Cuesplitter.sh` is intended to:
-1. find all available cuesheet files recursively starting from a given base directory (e.g. folder `Base` or folder `Artist, A.B.` above)
+`Cuesplitter.sh` takes 1 argument (base directory) and is intended to:
+1. find all available cuesheet files recursively starting from a given base directory (e.g. folder `Base` or folder `Artist, A.B.`)
 2. for each cuesheet (e.g. `misc.cue`), find a corresponding audio file (`misc.flac`) and split it into multiple music tracks according to defined splitpoint timecodes. The tracks are named consistently with cuesheet as `XX. Track Title.flac`
 3. annotate resulting music tracks with metadata from the cuesheet and embed cover image (if available) into each track
 4. **rename** processed source audio files like `misc.flac` $\rightarrow$ `misc.flac0`. Later, user may manually verify that everything has been split properly and easily erase them with command:  
@@ -45,9 +45,9 @@ Some music players, especially standalone devices, do not feel themselves confid
 * scale cover images properly
 * download anything from the Web (to avoid copyright issues)
 
-`Cuesplitter.sh` natively supports FLAC and MP3 audio files, APE and WV files are first converted into FLAC and then processed as usual.
+`Cuesplitter.sh` natively supports FLAC and MP3 audio files; M4A, APE and WV files are first converted into FLAC and then processed as usual.
 
-Being an auxiliary script that only converts a **preliminary** music library into its **normalized** form, `Cuesplitter.sh` may still leave some misformatted metadata or misformatted track/album names. Furthermore, `Cuesplitter,sh` does not scale cover images properly (it is even better not to provide large cover images for `Cuesplitter.sh`). Therefore, a major formatting task is delegated to the core `Audite.py` script, described in the next subsection.
+Being an auxiliary script that only converts a **preliminary** music library into its **normalized** form, `Cuesplitter.sh` may still leave some misformatted metadata or misformatted track/album names. Furthermore, `Cuesplitter.sh` does not scale cover images properly (it is even better not to provide large cover images for `Cuesplitter.sh`). Therefore, a major formatting task is delegated to the core `Audite.py` script, described in the next subsection.
 
 ### Dependencies
 
@@ -92,7 +92,7 @@ Base/
 * format FLAC and MP3 music file names and their metadata according to cuesheet CUE files
 * format track titles and album titles, primarily to force smart capitalization of words if required
 * update replay-gain information in FLAC and MP3 files to normalize loudness
-* convert M4A music files into FLAC
+* convert M4A music files into FLAC if any
 * scale cover images to be roughly square, 1000 px in height and 200-800 KiB in size (original larger image is preserved) and embed them directly into track files
 * maintain not only presence, but also uniqueness of track metadata and cover image
 * rename album folders according to cuesheet metadata and flatten complex albums (e.g. `Album/CD1/*`, `Album/CD2/*` $\rightarrow$ `Album/*`)
@@ -108,7 +108,7 @@ When a misformatted and ugly looking collection of music tracks is supplied with
 
 Unfortunately, during the initial development of `Audite.py` some entropy has leaked into the source code. In spite of being chaos exterminator, `Audite.py` has become somewhat messy itself.
 
-Consult `--help` letter and comments within `Audite.py` for further details on script usage and implemented formatting rules.
+Consult `--help` letter and comment header within `Audite.py` for further details on script usage and implemented formatting rules.
 
 ### Dependencies
 
@@ -126,20 +126,20 @@ The versions of packages listed below are sufficient but not strictly necessary 
 ## Playlister.py
 
 Once a local/self-hosted audio library has been established and nicely formatted by `Audite.py`, one would take pleasure of listening to music tracks and sorting them into playlists. A playlist may be:
-1. a folder with symbolic links pointing to favourite audiofiles
-2. an M3U text file with paths to the same audiofiles
+1. a folder with symbolic links pointing to favorite audio files
+2. an M3U text file with paths to the same audio files
 
 When the same playlist is represented by different means (perhaps, on different devices), it soon becomes desirable to synchronize them.
 
 `Playlister.py` is intended to:
-* **1st scenario:** read symbolic links from a directory, translate them into a listing of audiofiles and update an existing M3U list with their paths
-* **2nd scenario:** read an existing M3U list, construct symbolic links to audiofiles from its entries and append these into an existing folder
+* **1st scenario:** read symbolic links from a directory, translate them into a listing of audio files and update an existing M3U list with their paths
+* **2nd scenario:** read an existing M3U list, construct symbolic links to audio files from its entries and append these into an existing folder
 * optionally sort the M3U list
 * optionally rename symbolic links to get them nicely sorted by Artist, Album, Track no.
 * report the counts of duplicates, broken links, etc. detected in the course of synchronization
 * interactively ask for user intervention in some cases
 
-Consult `--help` letter and comments within `Playlister.py` for further details on script usage in both scenarios.
+Consult `--help` letter and comment header within `Playlister.py` for further details on script usage in both scenarios.
 
 ### Dependencies
 
