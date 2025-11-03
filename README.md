@@ -134,14 +134,14 @@ When the same playlist is represented by different means (perhaps, on different 
 `Playlister.py` is intended to:
 * **1st scenario:** read symbolic links from a directory, translate them into a listing of audio files and update an existing M3U list with their paths
 * **2nd scenario:** read an existing M3U list, construct symbolic links to audio files from its entries and append these into an existing folder
-* optionally sort the M3U list
-* optionally rename symbolic links to get them nicely sorted by Artist, Album, Track no.
+* optionally sort the M3U list (see **3rd scenario** as well)
+* optionally rename symbolic links to get them nicely sorted by Artist, Album, Track no. (see **3rd scenario** as well)
 * report the counts of duplicates, broken links, etc. detected in the course of synchronization
 * interactively ask for user intervention in some cases
 
 Note that `Playlister.py` is currently designed to only **extend** playlists, it never deletes existing entries. This mirrors the growing nature of playlists, however deleting capability might be implemented later. Manual deletion of entries is usually sufficient for everyday playlist management.
 
-Consult `--help` letter and comment header within `Playlister.py` for further details on script usage in both scenarios.
+Consult `--help` letter and comment header within `Playlister.py` for further details on script usage in all scenarios.
 
 ### Dependencies
 
