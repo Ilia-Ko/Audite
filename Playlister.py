@@ -286,6 +286,7 @@ else:
         # Sort M3U playlist if requested
         if sortM3U:
             SortTextFile(m3uFile)
+    
     else:
         if len(playEntries) == 0:
             print("Nothing to do, exiting")
