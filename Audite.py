@@ -140,7 +140,7 @@ SAFE_TABLE = str.maketrans("\t/\\|$?:*<>", ' ∕∖∣＄？.＊〈〉', "\n\r\0
 MAX_TRACKS = 9999   # Per album
 DECAP_TABLE = ["a", "an", "the", "on", "in", "to", "onto", "into", "from", "with", "without", "for", "of", "and", "or", "nor", "not", "but", "yet", "as", "so", "feat", "featuring", "featured", "alt", "st", "nd", "rd", "th"]
 RECAP_TABLE = ["i", "my", "me", "you", "your", "yours", "she", "her", "hers", "he", "his", "him", "they", "their", "theirs", "them", "we", "our", "ours", "us", "be", "am", "is", "are", "were", "was", "go", "do", "don't" "does", "doesn't", "did", "didn't", "done", "deja", "vu", "mr", "ms", "mrs", "dr", "yes", "no", "oh", "ah", "eh", "uh", "na", "ni", "li", "pt", "ho", "wa", "wo", "ma", "ed", "op", "nr", "can", "can't", "ad"]
-UPPER_TABLE = ["ac/dc", "u2", "o2", "h2o", "co2", "sf", "ost", "dna", "t.n.t.", "tnt", "mtv", "s.o.s.", "sos", "i.r.s.", "r.i.p.", "rip", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx", "xxi", "xxx", "mmxi", "mmxiv", "mcmxlv", "cd", "ok", "bp", "sp", "t.v.", "uk", "u.k.", "usa", "tv", "fx", "xs", "sfso", "bbc", "htts", "jlt", "bwv", "bwu", "fff", "rpp", "b", "c", "d", "f", "g", "u", "r", "s", "y", "z", "nwobhm", "jfk", "gj", "aov"]
+UPPER_TABLE = ["ac/dc", "u2", "o2", "h2o", "co2", "sf", "ost", "dna", "t.n.t.", "tnt", "mtv", "s.o.s.", "sos", "i.r.s.", "r.i.p.", "rip", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx", "xxi", "xxx", "mmxi", "mmxiv", "mcmxlv", "mcmlxxiv", "cd", "ok", "bp", "sp", "t.v.", "uk", "u.k.", "usa", "tv", "fx", "xs", "sfso", "bbc", "htts", "jlt", "bwv", "bwu", "fff", "rpp", "b", "c", "d", "f", "g", "u", "r", "s", "y", "z", "nwobhm", "jfk", "gj", "aov"]
 
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 # Global functions
@@ -1924,7 +1924,7 @@ class UnflatAlbum:
                             cueTrackTotal = int(trackTot)
                             if cueTrackTotal < 1 or cueTrackTotal > MAX_TRACKS:
                                 self.strStatus += f"\n\t+ unsupported track number {cueTrackTotal} in cuesheet '{shortCuePath}'"
-                    
+
                     # Build the list of track entries and indexes from this cuesheet
                     pos = 0
                     cueEntries = []
