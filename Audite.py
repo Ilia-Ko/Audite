@@ -259,11 +259,11 @@ def nameCrit(strX: str):
     if low.find("cover") >= 0:
         return 0
     if low.find("folder") >= 0:
-        return -0.01
+        return -1
     if low.find("front") >= 0:
-        return -0.02
+        return -2
     if low.find("image") >= 0:
-        return -0.05
+        return -5
     if low.find("artist") >= 0:
         return -100
     if low.find("logo") >= 0:
@@ -372,7 +372,7 @@ class CoverImage:
         self.fileSize = int(imgProps[3])
         if self.quality == 0:
             self.quality = 80
-        self.suitability = asymCrit(self.width, 1000) + asymCrit(self.height, 1000) + asymCrit(self.quality, 80) + nameCrit(self.name)
+        self.suitability = asymCrit(self.width, 1000) + asymCrit(self.height, 1000) + nameCrit(self.name) + asymCrit(self.quality, 80)
 
         # Check status
         self.needsRename = (self.ext != "jpg") or (self.name != "cover")
@@ -620,18 +620,18 @@ class Track:
                 strDate = strTags[pos+5:end].strip()
                 if strDate.isnumeric():
                     self.metaDate = int(strDate)
-                    if self.metaDate != self.album.year and 0 < self.album.year < NOW_YEAR:
+                    if self.metaDate != self.album.year and 0 < self.album.year <= NOW_YEAR:
                         self.needsRemark = True
                         self.strMetaStatus += f"\n\t\t+ DATE tag '{self.metaDate}' differs from album's year, priority for '{self.album.year:04d}'"
                         self.metaDate = self.album.year
-                elif 0 < self.album.year < NOW_YEAR:
+                elif 0 < self.album.year <= NOW_YEAR:
                     needsRemark = True
                     self.strMetaStatus += f"\n\t\t+ invalid DATE tag '{strDate}', suggested '{self.album.year:04d}'"
                     self.metaDate = self.album.year
                 if strTagsUpper.count("DATE=") > 1:
                     self.needsRemark = True
                     self.strMetaStatus += "\n\t\t+ duplicate DATE tag"
-            elif 0 < self.album.year < NOW_YEAR:
+            elif 0 < self.album.year <= NOW_YEAR:
                 self.needsRemark = True
                 self.strMetaStatus += f"\n\t\t+ missing DATE tag, suggested '{self.album.year:04d}'"
                 self.metaDate = self.album.year
@@ -794,7 +794,7 @@ class Track:
                 strDate = strTags[pos+5:end].strip()
                 if strDate.isnumeric():
                     self.metaDate = int(strDate)
-                    if self.metaDate != self.album.year and 0 < self.album.year < NOW_YEAR:
+                    if self.metaDate != self.album.year and 0 < self.album.year <= NOW_YEAR:
                         self.needsRemark = True
                         self.strMetaStatus += f"\n\t\t+ TDRC (year) tag '{self.metaDate:04d}' differs from album's year, priority for '{self.album.year:04d}'"
                         self.metaDate = self.album.year
@@ -802,7 +802,7 @@ class Track:
                     needsRemark = True
                     self.strMetaStatus += f"\n\t\t+ strange TDRC (year) tag '{strDate}', suggested '{self.album.year:04d}'"
                     self.metaDate = self.album.year
-            elif 0 < self.album.year < NOW_YEAR:
+            elif 0 < self.album.year <= NOW_YEAR:
                 self.needsRemark = True
                 self.strMetaStatus += f"\n\t\t+ missing TDRC (year) tag, suggested '{self.album.year:04d}'"
                 self.metaDate = self.album.year
@@ -947,7 +947,7 @@ class Track:
                 strDate = strTags[pos+5:end].strip()
                 if strDate.isnumeric():
                     self.metaDate = int(strDate)
-                    if self.metaDate != self.album.year and 0 < self.album.year < NOW_YEAR:
+                    if self.metaDate != self.album.year and 0 < self.album.year <= NOW_YEAR:
                         self.needsRemark = True
                         self.strMetaStatus += f"\n\t\t+ ©DAY (year) tag '{self.metaDate:04d}' differs from album's year, priority for '{self.album.year:04d}'"
                         self.metaDate = self.album.year
@@ -955,7 +955,7 @@ class Track:
                     needsRemark = True
                     self.strMetaStatus += f"\n\t\t+ strange ©DAY (year) tag '{strDate}', suggested '{self.album.year:04d}'"
                     self.metaDate = self.album.year
-            elif 0 < self.album.year < NOW_YEAR:
+            elif 0 < self.album.year <= NOW_YEAR:
                 self.needsRemark = True
                 self.strMetaStatus += f"\n\t\t+ missing ©DAY (year) tag, suggested '{self.album.year:04d}'"
                 self.metaDate = self.album.year
@@ -1162,7 +1162,7 @@ class Track:
                             f'--set-tag=TRACKTOTAL={self.metaTrackTotal}', f'--set-tag=TITLE={self.metaTitle}', \
                             f'--set-tag=ARTIST={self.metaArtist}', f'--set-tag=ALBUM={self.metaAlbum}', \
                             f'--set-tag=GENRE={self.metaGenre}', self.fullPath])
-                if 0 < self.metaDate < NOW_YEAR:
+                if 0 < self.metaDate <= NOW_YEAR:
                     proc.call(['metaflac', '--remove-tag=DATE', '--remove-tag=YEAR', self.fullPath])
                     proc.call(['metaflac', f'--set-tag=DATE={self.metaDate}', self.fullPath])
                 if allowComposer and len(self.metaComposer) > 0:
@@ -1454,7 +1454,7 @@ class Album:
                         if p.isnumeric():
                             dirYear = int(p)
                             parts.remove(p)
-                            if 0 < dirYear < NOW_YEAR:
+                            if 0 < dirYear <= NOW_YEAR:
                                 self.year = dirYear
                                 self.strStatus += f"\n\t+ album year deduced from album dir name: {self.year:04d}"
                                 break
@@ -1483,7 +1483,7 @@ class Album:
                         strYear = self.dirName[:pos].strip()
                         if strYear.isnumeric():
                             dirYear = int(strYear)
-                            if 0 < dirYear < NOW_YEAR:
+                            if 0 < dirYear <= NOW_YEAR:
                                 self.year = dirYear
                                 self.strStatus += f"\n\t+ album year deduced from album dir name: {self.year:04d}"
                     if 0 == len(self.title):
