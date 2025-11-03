@@ -140,7 +140,7 @@ SAFE_TABLE = str.maketrans("\t/\\|$?:*<>", ' ∕∖∣＄？.＊〈〉', "\n\r\0
 MAX_TRACKS = 9999   # Per album
 DECAP_TABLE = ["a", "an", "the", "on", "in", "to", "onto", "into", "from", "with", "without", "for", "of", "and", "or", "nor", "not", "but", "yet", "as", "so", "feat", "featuring", "featured", "alt", "st", "nd", "rd", "th"]
 RECAP_TABLE = ["i", "my", "me", "you", "your", "yours", "she", "her", "hers", "he", "his", "him", "they", "their", "theirs", "them", "we", "our", "ours", "us", "be", "am", "is", "are", "were", "was", "go", "do", "don't" "does", "doesn't", "did", "didn't", "done", "deja", "vu", "mr", "ms", "mrs", "dr", "yes", "no", "oh", "ah", "eh", "uh", "na", "ni", "li", "pt", "ho", "wa", "wo", "ma", "ed", "op", "nr", "can", "can't", "ad"]
-UPPER_TABLE = ["ac/dc", "u2", "o2", "h2o", "co2", "sf", "ost", "dna", "t.n.t.", "tnt", "mtv", "s.o.s.", "sos", "i.r.s.", "r.i.p.", "rip", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx", "xxi", "xxx", "mmxi", "mmxiv", "mcmxlv", "cd", "ok", "bp", "sp", "t.v.", "uk", "u.k.", "usa", "tv", "fx", "xs", "sfso", "bbc", "htts", "jlt", "bwv", "bwu", "fff", "rpp", "b", "c", "d", "f", "g", "u", "r", "s", "y", "z", "nwobhm", "jfk"]
+UPPER_TABLE = ["ac/dc", "u2", "o2", "h2o", "co2", "sf", "ost", "dna", "t.n.t.", "tnt", "mtv", "s.o.s.", "sos", "i.r.s.", "r.i.p.", "rip", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx", "xxi", "xxx", "mmxi", "mmxiv", "mcmxlv", "cd", "ok", "bp", "sp", "t.v.", "uk", "u.k.", "usa", "tv", "fx", "xs", "sfso", "bbc", "htts", "jlt", "bwv", "bwu", "fff", "rpp", "b", "c", "d", "f", "g", "u", "r", "s", "y", "z", "nwobhm", "jfk", "gj"]
 
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 # Global functions
@@ -1012,7 +1012,7 @@ class Track:
                 cueTit = self.album.cueEntries[cueInd]
                 score = 0
                 if len(self.name) > 0:
-                    score += 5 * similar(self.name, cueTit)
+                    score += 5 * similar(self.name.lower(), cueTit.lower())
                 if len(self.metaTitle) > 0:
                     score += 3 * similar(self.metaTitle, cueTit)
                 if self.number > 0 and not self.name.isascii():
@@ -1924,65 +1924,7 @@ class UnflatAlbum:
                             cueTrackTotal = int(trackTot)
                             if cueTrackTotal < 1 or cueTrackTotal > MAX_TRACKS:
                                 self.strStatus += f"\n\t+ unsupported track number {cueTrackTotal} in cuesheet '{shortCuePath}'"
-
-                    '''# Build the list of track entries and indexes from this cuesheet
-                    pos = 0
-                    cueEntries = []
-                    cueEntIdxes = []
-                    for i in range(cueTrackTotal):
-                        # Find the next track
-                        pos1 = cuetext.find('TRACK ', pos)
-                        if pos1 < 0:
-                            break
-                        pos = pos1+6
-                        end = cuetext.find(' ', pos)
-                        # Find track number
-                        trackNo = cuetext[pos:end].strip()
-                        if trackNo.isnumeric():
-                            tInd = int(trackNo)
-                            if i+1 != tInd:
-                                break
-                        else:
-                            break
-                        # Find track title
-                        pos1 = cuetext.find('TITLE ', pos)
-                        if pos1 < 0:
-                            break
-                        pos = pos1+6
-                        pos1 = cuetext.find('\n', pos)
-                        if pos1 < 0:
-                            break
-                        cueStr = cutCueLine(cuetext[pos:pos1])
-                        trackTitle = coerceTitle(cueStr)
-                        cueEntries.append(trackTitle)
-                        pos = pos1+1
-                        # Find track indexes
-                        posNext = cuetext.find('TRACK ', pos)
-                        if posNext < 0:
-                            posNext = len(cuetext)  # We are working with the last track, so limit it due to file end
-                        entIdxes = []
-                        pos1 = cuetext.find('INDEX 00 ', pos)
-                        if pos1 > 0 and pos1 < posNext:
-                            end = cuetext.find('\n', pos1+9)
-                            if end > pos1:
-                                cueIdx = cuetext[pos1+9:end].lstrip()
-                                if '\r' == cueIdx[-1]:
-                                    cueIdx = cueIdx[:-1].rstrip()
-                                entIdxes.append(cueIdx)
-                        pos1 = cuetext.find('INDEX 01 ', pos)
-                        if pos1 > 0 and pos1 < posNext:
-                            end = cuetext.find('\n', pos1+9)
-                            if end > pos1:
-                                cueIdx = cuetext[pos1+9:end].lstrip()
-                                if '\r' == cueIdx[-1]:
-                                    cueIdx = cueIdx[:-1].rstrip()
-                                entIdxes.append(cueIdx)
-                        if 0 == len(entIdxes):
-                            cueEntIdxes.append(["00:00:00"])
-                        else:
-                            cueEntIdxes.append(entIdxes)
-                    '''
-
+                    
                     # Build the list of track entries and indexes from this cuesheet
                     pos = 0
                     cueEntries = []
