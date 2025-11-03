@@ -114,6 +114,9 @@ function SplitByCUE {
     elif [[ "$2" =~ "CD3" ]]; then
         mkdir -p "CD3"
         splitDir="CD3"
+    elif [[ "$2" =~ "Bonus" ]]; then
+        mkdir -p "Bonus CD"
+        splitDir="Bonus CD"
     fi
     echo "Dest.folder: '$splitDir'"
     if [[ "$splitDir" != "." ]]; then
