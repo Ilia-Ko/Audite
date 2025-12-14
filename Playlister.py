@@ -92,6 +92,7 @@ else:
     extBase = ""
     sortM3U = False
     fullLinks = False
+    sepBslash = False   # Whether external path separator is 'backslash' ('\') character, otherwise forward slash
 
     if modeL2M:
         # links-to-m3u
@@ -99,6 +100,7 @@ else:
         m3uFile = sys.argv[3]
         baseDir = sys.argv[4]
         extBase = sys.argv[5]
+        sepBslash = ('\\' == extBase[-1])   # Detect backslash-like path formatting from external base directory
         if 1+6 == argc:
             sortM3U = (sys.argv[6] == '--sort-m3u')
             if not sortM3U:
@@ -267,9 +269,10 @@ else:
         with open(m3uFile, 'a') as m3u:
             nApp = 0
             for f in inFiles:
-                relPath = os.path.relpath(f, baseDir)   # Relate a file to base dir
+                relPath = os.path.relpath(f, baseDir)       # Relate a file to base dir
                 extPath = os.path.join(extBase, relPath)
-                extPath = extPath.replace('/', '\\')    # Convert separators to backslashes
+                if sepBslash:
+                    extPath = extPath.replace('/', '\\')    # Convert separators to backslashes if needed
                 if not extPath in playEntries:
                     do = input(relPath+" ENTER: ")
                     if len(do) > 0:
@@ -300,7 +303,7 @@ else:
         missed = []
         aborted = []
         for e in playEntries:
-            extPath = e.replace('\\', '/')  # Convert separators to slashes
+            extPath = e.replace('\\', '/')  # Convert backslash separators to forward slashes if any
             relPath = os.path.relpath(extPath, extBase)
             locPath = os.path.join(baseDir, relPath)    # Create local path
             if os.path.isfile(locPath):
