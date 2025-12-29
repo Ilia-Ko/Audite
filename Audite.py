@@ -206,7 +206,7 @@ def canBeAlbum(dName: str, *, insideComplex: bool = False):
     numTracks = 0
     if os.path.isdir(dName):
         baseDname = os.path.basename(dName)
-        if baseDname.find("- ") >= 0 or singleAlbum or insideComplex or "Misc" == baseDname or "Bonus CD" == baseDname: # Regular album must contain '-' in its dir name
+        if baseDname.find("- ") >= 0 or baseDname.find(". ") >= 0 or singleAlbum or insideComplex or "Misc" == baseDname or "Bonus CD" == baseDname: # Regular album must contain '-' in its dir name
             for elem in os.listdir(dName):
                 fullPath = os.path.join(dName, elem)
                 if os.path.isfile(fullPath) and isAudioFile(elem):
@@ -217,7 +217,7 @@ def canBeComplexAlbum(dName: str):
     numAlbums = 0
     if os.path.isdir(dName):
         baseDname = os.path.basename(dName)
-        if baseDname.find("- ") > 0 or singleAlbum or "Misc" == baseDname:  # Album must contain '-' in its dir name
+        if baseDname.find("- ") > 0 or baseDname.find(". ") > 0 or singleAlbum or "Misc" == baseDname:  # Album must contain '-' in its dir name
             for elem in os.listdir(dName):
                 fullPath = os.path.join(dName, elem)
                 if canBeAlbum(fullPath, insideComplex=True):
