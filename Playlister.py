@@ -273,6 +273,8 @@ else:
                 extPath = os.path.join(extBase, relPath)
                 if sepBslash:
                     extPath = extPath.replace('/', '\\')    # Convert separators to backslashes if needed
+                extPath = extPath.replace("//", "/")
+                extPath = extPath.replace("\\\\", "\\")
                 if not extPath in playEntries:
                     do = input(relPath+" ENTER: ")
                     if len(do) > 0:
