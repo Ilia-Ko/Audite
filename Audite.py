@@ -140,7 +140,7 @@ SAFE_TABLE = str.maketrans("\t/\\|$?:*<>", ' ∕∖∣＄？.＊〈〉', "\n\r\0
 MAX_TRACKS = 9999   # Per album
 DECAP_TABLE = ["a", "an", "the", "on", "in", "to", "onto", "into", "from", "with", "without", "for", "of", "and", "or", "nor", "not", "but", "yet", "as", "so", "feat", "featuring", "featured", "alt", "st", "nd", "rd", "th"]
 RECAP_TABLE = ["i", "my", "me", "you", "your", "yours", "she", "her", "hers", "he", "his", "him", "they", "their", "theirs", "them", "we", "our", "ours", "us", "be", "am", "is", "are", "were", "was", "go", "do", "don't" "does", "doesn't", "did", "didn't", "done", "deja", "vu", "mr", "ms", "mrs", "dr", "yes", "no", "oh", "ah", "eh", "uh", "na", "ni", "li", "pt", "ho", "wa", "wo", "ma", "ed", "op", "nr", "can", "can't", "ad"]
-UPPER_TABLE = ["ac/dc", "u2", "o2", "h2o", "co2", "sf", "ost", "dna", "t.n.t.", "tnt", "mtv", "s.o.s.", "sos", "i.r.s.", "r.i.p.", "rip", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx", "xxi", "xxx", "mmxi", "mmxiv", "mcmxlv", "mcmlxxiv", "cd", "ok", "bp", "sp", "t.v.", "uk", "u.k.", "usa", "tv", "fx", "xs", "sfso", "bbc", "htts", "jlt", "bwv", "bwu", "fff", "rpp", "b", "c", "d", "f", "g", "u", "r", "s", "y", "z", "nwobhm", "jfk", "gj", "aov"]
+UPPER_TABLE = ["ac/dc", "u2", "o2", "h2o", "co2", "sf", "ost", "dna", "t.n.t.", "tnt", "mtv", "s.o.s.", "sos", "i.r.s.", "r.i.p.", "rip", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx", "xxi", "xxx", "mmxi", "mmxiv", "mcmxlv", "mcmlxxiv", "mmv", "cd", "ok", "bp", "sp", "t.v.", "uk", "u.k.", "usa", "tv", "fx", "xs", "sfso", "bbc", "htts", "jlt", "bwv", "bwu", "fff", "rpp", "b", "c", "d", "f", "g", "u", "r", "s", "y", "z", "nwobhm", "jfk", "gj", "aov"]
 
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 # Global functions
@@ -625,7 +625,7 @@ class Track:
                         self.strMetaStatus += f"\n\t\t+ DATE tag '{self.metaDate}' differs from album's year, priority for '{self.album.year:04d}'"
                         self.metaDate = self.album.year
                 elif 0 < self.album.year <= NOW_YEAR:
-                    needsRemark = True
+                    self.needsRemark = True
                     self.strMetaStatus += f"\n\t\t+ invalid DATE tag '{strDate}', suggested '{self.album.year:04d}'"
                     self.metaDate = self.album.year
                 if strTagsUpper.count("DATE=") > 1:
@@ -799,7 +799,7 @@ class Track:
                         self.strMetaStatus += f"\n\t\t+ TDRC (year) tag '{self.metaDate:04d}' differs from album's year, priority for '{self.album.year:04d}'"
                         self.metaDate = self.album.year
                 else:
-                    needsRemark = True
+                    self.needsRemark = True
                     self.strMetaStatus += f"\n\t\t+ strange TDRC (year) tag '{strDate}', suggested '{self.album.year:04d}'"
                     self.metaDate = self.album.year
             elif 0 < self.album.year <= NOW_YEAR:
@@ -952,7 +952,7 @@ class Track:
                         self.strMetaStatus += f"\n\t\t+ ©DAY (year) tag '{self.metaDate:04d}' differs from album's year, priority for '{self.album.year:04d}'"
                         self.metaDate = self.album.year
                 else:
-                    needsRemark = True
+                    self.needsRemark = True
                     self.strMetaStatus += f"\n\t\t+ strange ©DAY (year) tag '{strDate}', suggested '{self.album.year:04d}'"
                     self.metaDate = self.album.year
             elif 0 < self.album.year <= NOW_YEAR:
@@ -1261,7 +1261,7 @@ class Album:
             self.artist = bandName
         if len(composerName) > 0:
             self.composer = composerName
-        if albumYear > 0:
+        if albumYear != 0:
             self.year = albumYear
         if len(albumGenre) > 0:
             self.genre = albumGenre
@@ -1790,7 +1790,7 @@ class UnflatAlbum:
             self.artist = bandName
         if allowComposer and len(composerName) > 0:
             self.composer = composerName
-        if albumYear > 0:
+        if albumYear != 0:
             self.year = albumYear
         if len(albumGenre) > 0:
             self.genre = albumGenre
@@ -2371,13 +2371,15 @@ else:
         print("Album title will be deduced")
     else:
         print("Miscellaneous albums")
-if albumYear > 0:
-    print(f"Defined album year is {albumYear}")
-else:
+if 0 == albumYear:
     if singleAlbum:
         print("Album year will be deduced")
     else:
         print("Miscellaneous years")
+elif 0 < albumYear:
+    print(f"Defined album year is {albumYear}")
+else:
+    print("Preserving year metadata")
 if dryRun:
     print("DRY RUN - nothing will be changed")
 else:
